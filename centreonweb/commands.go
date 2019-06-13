@@ -7,7 +7,7 @@ import (
 const command_object string = "CMD"
 
 type commandsClient struct {
-	CentClient *centreonwebClient
+	CentClient *CentreonwebClient
 }
 
 type Commands struct {
