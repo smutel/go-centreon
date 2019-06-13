@@ -11,7 +11,7 @@ type login struct {
 	AuthToken string `json:"authToken"`
 }
 
-func (cli *centreonwebClient) login() error {
+func (cli *CentreonwebClient) login() error {
 	reqInputs := client.RequestInput{
 		Method: http.MethodPost,
 		Path:   centreon_api_path,

@@ -11,7 +11,7 @@ import (
 
 const centreon_api_path string = "/centreon/api/index.php"
 
-type centreonwebClient struct {
+type CentreonwebClient struct {
 	MainClient *client.Client
 
 	ConfigQuery  *url.Values
@@ -29,7 +29,7 @@ type centreonwebConfigInput struct {
 	Values string
 }
 
-func New(centreonURL string, insecure bool, username string, password string) (*centreonwebClient, error) {
+func New(centreonURL string, insecure bool, username string, password string) (*CentreonwebClient, error) {
 	client, err := client.New(centreonURL, insecure)
 
 	if err != nil {
@@ -53,7 +53,7 @@ func New(centreonURL string, insecure bool, username string, password string) (*
 	authHeader := &http.Header{}
 	authHeader.Set("Content-Type", "application/x-www-form-urlencoded; param=value")
 
-	return &centreonwebClient{
+	return &CentreonwebClient{
 		MainClient:   client,
 		ConfigQuery:  configQuery,
 		ConfigHeader: configHeader,
@@ -63,11 +63,11 @@ func New(centreonURL string, insecure bool, username string, password string) (*
 	}, nil
 }
 
-func (c *centreonwebClient) Commands() *commandsClient {
+func (c *CentreonwebClient) Commands() *commandsClient {
 	return &commandsClient{c}
 }
 
-func (c *centreonwebClient) centreonApiRequest(action string, object string, values string) (io.ReadCloser, error) {
+func (c *CentreonwebClient) centreonApiRequest(action string, object string, values string) (io.ReadCloser, error) {
 	err := c.login()
 	if err != nil {
 		return nil, err
