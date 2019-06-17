@@ -15,10 +15,10 @@ type Commands struct {
 }
 
 type Command struct {
-	ID   string   `json:"id"`
-	Name string   `json:"name"`
-	Type string   `json:"type"`
-	Line []string `json:"line"`
+	ID   string `json:"id"`
+	Name string `json:"name"`
+	Type string `json:"type"`
+	Line string `json:"line"`
 }
 
 func (c *commandsClient) Show(name string) ([]Command, error) {
@@ -39,7 +39,7 @@ func (c *commandsClient) Show(name string) ([]Command, error) {
 }
 
 func (c *commandsClient) Add(cmd Command) error {
-	values := cmd.Name + ";" + cmd.Type + ";" + cmd.Line[0]
+	values := cmd.Name + ";" + cmd.Type + ";" + cmd.Line
 
 	respReader, err := c.CentClient.centreonApiRequest("add", command_object, values)
 	if err != nil {
