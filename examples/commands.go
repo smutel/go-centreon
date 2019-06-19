@@ -56,12 +56,24 @@ func main() {
 	}
 
 	var cmd centreonweb.Command
-	cmd, err = c.Commands().Get("test")
+	cmd, err = c.Commands().Get("check_centreon_dummy")
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
 	} else {
-		fmt.Println("Command found with ID:", cmd.ID)
+		fmt.Println("Command check_centreon_dummy found with ID:", cmd.ID)
+	}
+
+	cmdExists, err := c.Commands().Exists("check_centreon_dummy")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	} else {
+		if cmdExists == true {
+			fmt.Println("Command check_centreon_dummy exists")
+		} else {
+			fmt.Println("Command check_centreon_dummy does not exists")
+		}
 	}
 
 	cmd = centreonweb.Command{

@@ -60,6 +60,23 @@ func (c *commandsClient) Get(name string) (Command, error) {
 	return cmdFound, nil
 }
 
+func (c *commandsClient) Exists(name string) (bool, error) {
+	cmdExists := false
+
+	cmds, err := c.Show(name)
+	if err != nil {
+		return cmdExists, err
+	}
+
+	for _, c := range cmds {
+		if c.Name == name {
+			cmdExists = true
+		}
+	}
+
+	return cmdExists, nil
+}
+
 func (c *commandsClient) Add(cmd Command) error {
 	values := cmd.Name + ";" + cmd.Type + ";" + cmd.Line
 
