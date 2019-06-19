@@ -20,8 +20,9 @@ package main
 
 import (
 	"fmt"
-	"go-centreon/centreonweb"
 	"os"
+	
+  "github.com/smutel/go-centreon/centreonweb"
 )
 
 func main() {
@@ -104,7 +105,13 @@ $ export CENTREON_USER="admin"
 $ export CENTREON_PASSWORD="centreon"
 $ go run examples/commands.go
 Commands count: 101
+Command check_centreon_dummy found with ID: 59
+Command check_centreon_dummy exists
 Command added: check-host-alive
 Set type (check) of command check-host-alive
 Command check-host-alive deleted
 ```
+
+## Known bugs which can impact this framework
+
+* Issue [7621](https://github.com/centreon/centreon/issues/7621)
