@@ -55,7 +55,16 @@ func main() {
 		fmt.Println("Commands count:", len(cmds))
 	}
 
-	cmd := centreonweb.Command{
+	var cmd centreonweb.Command
+	cmd, err = c.Commands().Get("test")
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	} else {
+		fmt.Println("Command found with ID:", cmd.ID)
+	}
+
+	cmd = centreonweb.Command{
 		Name: "check-host-alive",
 		Type: "check",
 		Line: "$USER1$/check_ping -H $HOSTADDRESS$ -w 3000.0,80% -c 5000.0,100% -p 1",

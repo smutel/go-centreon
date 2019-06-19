@@ -2,6 +2,8 @@ package centreonweb
 
 import (
 	"encoding/json"
+
+	pkgerrors "github.com/pkg/errors"
 )
 
 const command_object string = "CMD"
@@ -36,6 +38,26 @@ func (c *commandsClient) Show(name string) ([]Command, error) {
 	decoder.Decode(&cmds)
 
 	return cmds.Cmd, nil
+}
+
+func (c *commandsClient) Get(name string) (Command, error) {
+	var cmdFound Command
+	cmds, err := c.Show(name)
+	if err != nil {
+		return cmdFound, err
+	}
+
+	for _, c := range cmds {
+		if c.Name == name {
+			cmdFound = c
+		}
+	}
+
+	if cmdFound.ID == "" {
+		return cmdFound, pkgerrors.New("command " + name + " not found")
+	}
+
+	return cmdFound, nil
 }
 
 func (c *commandsClient) Add(cmd Command) error {
