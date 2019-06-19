@@ -2,8 +2,9 @@ package main
 
 import (
 	"fmt"
-	"go-centreon/centreonweb"
 	"os"
+
+	"github.com/smutel/go-centreon/centreonweb"
 )
 
 func main() {

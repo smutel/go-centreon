@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"go-centreon/client"
+	"github.com/smutel/go-centreon/client"
 )
 
 type login struct {

@@ -1,12 +1,12 @@
 package centreonweb
 
 import (
-	"go-centreon/client"
 	"io"
 	"net/http"
 	"net/url"
 
 	pkgerrors "github.com/pkg/errors"
+	"github.com/smutel/go-centreon/client"
 )
 
 const centreon_api_path string = "/centreon/api/index.php"
