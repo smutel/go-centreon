@@ -2,9 +2,10 @@ package main
 
 import (
 	"fmt"
-	"go-centreon/centreonweb"
 	"os"
 	"strconv"
+
+	"github.com/smutel/go-centreon/centreonweb"
 )
 
 const (
