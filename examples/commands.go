@@ -9,38 +9,38 @@ import (
 )
 
 const (
-	DEFAULT_CENTREON_URL      string = "http://127.0.0.1"
-	DEFAULT_CENTREON_SSL      bool   = false
-	DEFAULT_CENTREON_USER     string = "admin"
-	DEFAULT_CENTREON_PASSWORD string = "centreon"
+	defaultCentreonURL      string = "http://127.0.0.1"
+	defaultCentreonSsl      bool   = false
+	defaultCentreonUser     string = "admin"
+	defaultCentreonPassword string = "centreon"
 )
 
 func main() {
-	centreon_url, set := os.LookupEnv("CENTREON_URL")
+	centreonURL, set := os.LookupEnv("CENTREON_URL")
 	if !set {
-		fmt.Println("Variable CENTREON_URL not set, using default value (" + DEFAULT_CENTREON_URL + ")")
-		centreon_url = DEFAULT_CENTREON_URL
+		fmt.Println("Variable CENTREON_URL not set, using default value (" + defaultCentreonURL + ")")
+		centreonURL = defaultCentreonURL
 	}
 
 	ssl, err := strconv.ParseBool(os.Getenv("CENTREON_ALLOW_UNVERIFIED_SSL"))
 	if err != nil {
-		fmt.Println("No boolean found in variable CENTREON_ALLOW_UNVERIFIED_SSL, using default value (" + strconv.FormatBool(DEFAULT_CENTREON_SSL) + ")")
-		ssl = DEFAULT_CENTREON_SSL
+		fmt.Println("No boolean found in variable CENTREON_ALLOW_UNVERIFIED_SSL, using default value (" + strconv.FormatBool(defaultCentreonSsl) + ")")
+		ssl = defaultCentreonSsl
 	}
 
-	centreon_user, set := os.LookupEnv("CENTREON_USER")
+	centreonUser, set := os.LookupEnv("CENTREON_USER")
 	if !set {
-		fmt.Println("Variable CENTREON_USER not set, using default value (" + DEFAULT_CENTREON_USER + ")")
-		centreon_user = DEFAULT_CENTREON_USER
+		fmt.Println("Variable CENTREON_USER not set, using default value (" + defaultCentreonUser + ")")
+		centreonUser = defaultCentreonUser
 	}
 
-	centreon_password, set := os.LookupEnv("CENTREON_PASSWORD")
+	centreonPassword, set := os.LookupEnv("CENTREON_PASSWORD")
 	if !set {
-		fmt.Println("Variable CENTREON_PASSWORD not set, using default value (" + DEFAULT_CENTREON_PASSWORD + ")")
-		centreon_password = DEFAULT_CENTREON_PASSWORD
+		fmt.Println("Variable CENTREON_PASSWORD not set, using default value (" + defaultCentreonPassword + ")")
+		centreonPassword = defaultCentreonPassword
 	}
 
-	c, err := centreonweb.New(centreon_url, ssl, centreon_user, centreon_password)
+	c, err := centreonweb.New(centreonURL, ssl, centreonUser, centreonPassword)
 
 	if err != nil {
 		fmt.Println(err.Error())
