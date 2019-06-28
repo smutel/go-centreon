@@ -46,6 +46,8 @@ func main() {
 
 ```
 
+For further information you can consult the [GoDoc](https://godoc.org/github.com/smutel/go-centreon) for this package.
+
 ## Contributing to this project
 
 To contribute to this project I suggest to use the [centreon style guides](https://github.com/centreon/centreon/blob/master/CONTRIBUTING.md#centreon-style-guides).  
