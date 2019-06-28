@@ -1,9 +1,11 @@
 # go-centreon
 
+[![Build Status](https://travis-ci.org/smutel/go-centreon.svg?branch=master)](https://travis-ci.org/smutel/go-centreon)
+[![Go Report Card](https://goreportcard.com/badge/github.com/smutel/go-centreon)](https://goreportcard.com/report/github.com/smutel/go-centreon)
+[![Conventional Commits](https://img.shields.io/badge/Conventional%20Commits-1.0.0-yellow.svg)](https://conventionalcommits.org)
+
 `go-centreon` is a client SDK for Go applications to access centreon APIs.  
 For now this project is focus on centreon web application.
-
-[![Build Status](https://travis-ci.org/smutel/go-centreon.svg?branch=master)](https://travis-ci.org/smutel/go-centreon)
 
 ## Usage
 
@@ -19,27 +21,27 @@ Then you can access each configuration object by an interface (Commands, Hosts,
 package main
 
 import (
-	"fmt"
-	"os"
-	
+  "fmt"
+  "os"
+  
   "github.com/smutel/go-centreon/centreonweb"
 )
 
 func main() {
-	c, err := centreonweb.New("http://10.182.19.122:8080", true, "admin", "centreon")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
-	}
+  c, err := centreonweb.New("http://10.182.19.122:8080", true, "admin", "centreon")
+  if err != nil {
+    fmt.Println(err.Error())
+    os.Exit(1)
+  }
 
-	var cmds []centreonweb.Command
-	cmds, err = c.Commands().Show("")
-	if err != nil {
-		fmt.Println(err.Error())
-		os.Exit(1)
-	} else {
-		fmt.Println("Commands count:", len(cmds))
-	}
+  var cmds []centreonweb.Command
+  cmds, err = c.Commands().Show("")
+  if err != nil {
+    fmt.Println(err.Error())
+    os.Exit(1)
+  }
+  
+  fmt.Println("Commands count:", len(cmds))
 }
 
 ```
