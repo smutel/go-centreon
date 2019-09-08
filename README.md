@@ -107,7 +107,7 @@ $ export CENTREON_URL="http://10.164.48.254:8080"
 $ export CENTREON_ALLOW_UNVERIFIED_SSL="true"
 $ export CENTREON_USER="admin"
 $ export CENTREON_PASSWORD="centreon"
-$ go run examples/commands.go
+$ go run examples/command/commands.go
 Commands count: 101
 Command check_centreon_dummy found with ID: 59
 Command check_centreon_dummy exists
