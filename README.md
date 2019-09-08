@@ -88,7 +88,7 @@ take one task to be implemented.
 |       Service Groups      |         SG        | **NOT DONE** |
 |     Service Categories    |         SC        | **NOT DONE** |
 |          Settings         |      Settings     | **NOT DONE** |
-|        Time Periods       |         TP        | **NOT DONE** |
+|        Time Periods       |         TP        |    *DONE*    |
 |           Traps           |        TRAP       | **NOT DONE** |
 |          Vendors          |       VENDOR      | **NOT DONE** |
 
