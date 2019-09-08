@@ -1,7 +1,4 @@
 {
-  "scripts": {
-    "prebump": "echo 0.0.1"
-  },
   "types":[
     {
       "type":"enh",
