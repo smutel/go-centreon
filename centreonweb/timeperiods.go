@@ -26,7 +26,7 @@ type ClientTimeperiods struct {
 
 // Timeperiods is an array of Timeperiod to store the answer from Centreon API
 type Timeperiods struct {
-	Cmd []Timeperiod `json:"result"`
+	Tmp []Timeperiod `json:"result"`
 }
 
 // Timeperiod struct is used to store parameters of a timeperiod
@@ -43,6 +43,19 @@ type Timeperiod struct {
 	Saturday  string `json:"saturday"`
 }
 
+// TimeperiodExceptions is an array of Timeperiod Exception to store the answer
+// from Centreon API
+type TimeperiodExceptions struct {
+	TmpEx []TimeperiodException `json:"result"`
+}
+
+// TimeperiodException struct is used to store parameters of a timeperiod
+// exception
+type TimeperiodException struct {
+	Days      string `json:"days"`
+	Timerange string `json:"timerange"`
+}
+
 // Show lists available timeperiods
 func (c *ClientTimeperiods) Show(name string) ([]Timeperiod, error) {
 	respReader, err := c.CentClient.centreonAPIRequest("show", timeperiodObject, name)
@@ -54,11 +67,11 @@ func (c *ClientTimeperiods) Show(name string) ([]Timeperiod, error) {
 		defer respReader.Close()
 	}
 
-	var cmds Timeperiods
+	var tmps Timeperiods
 	decoder := json.NewDecoder(respReader)
-	decoder.Decode(&cmds)
+	decoder.Decode(&tmps)
 
-	return cmds.Cmd, nil
+	return tmps.Tmp, nil
 }
 
 // Get returns a specific timeperiod
@@ -160,6 +173,24 @@ func (c *ClientTimeperiods) Setexception(name string, param string, value string
 	}
 
 	return nil
+}
+
+// Getexception is used to get all exception for this timeperiod
+func (c *ClientTimeperiods) Getexception(name string) ([]TimeperiodException, error) {
+	respReader, err := c.CentClient.centreonAPIRequest("getexception", timeperiodObject, name)
+	if err != nil {
+		return nil, err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	var tmpExs TimeperiodExceptions
+	decoder := json.NewDecoder(respReader)
+	decoder.Decode(&tmpExs)
+
+	return tmpExs.TmpEx, nil
 }
 
 // Delexception is used to remove an exception for this timeperiod

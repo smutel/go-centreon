@@ -106,6 +106,15 @@ func main() {
 
 	fmt.Println("Set exception for " + tmp.Name)
 
+	var tmpExs []centreonweb.TimeperiodException
+	tmpExs, err = c.Timeperiods().Getexception(tmp.Name)
+	if err != nil {
+		fmt.Println(err.Error())
+		os.Exit(1)
+	} else {
+		fmt.Println("Timeperiods exception count:", len(tmpExs))
+	}
+
 	err = c.Timeperiods().Delexception(tmp.Name, "january 1")
 	if err != nil {
 		fmt.Println(err.Error())
