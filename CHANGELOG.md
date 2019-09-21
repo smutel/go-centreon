@@ -2,6 +2,21 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.3](https://github.com/smutel/go-centreon/compare/v0.0.1...v0.0.3) (2019-09-21)
+
+
+### Enhancements
+
+* **centreonweb:** Put examples in separated folders ([e214efc](https://github.com/smutel/go-centreon/commit/e214efc))
+* **timeperiods:** Check if parameters of function are empty ([1360c88](https://github.com/smutel/go-centreon/commit/1360c88))
+
+
+### Features
+
+* **centreonweb:** Add versionrc config file for standard-version ([1707a81](https://github.com/smutel/go-centreon/commit/1707a81))
+* **timeperiods:** Add a function to get timeperiod exceptions ([b1f8bb1](https://github.com/smutel/go-centreon/commit/b1f8bb1))
+* **timeperiods:** Implements functions to manage timeperiods ([f31291e](https://github.com/smutel/go-centreon/commit/f31291e))
+
 ### [0.0.2](https://github.com/smutel/go-centreon/compare/v0.0.1...v0.0.2) (2019-09-08)
 
 

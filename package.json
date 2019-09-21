@@ -1,0 +1,5 @@
+{
+  "name": "go-centreon",
+  "version": "0.0.3",
+  "description": "Go library to access centreon API"
+}
