@@ -61,6 +61,7 @@ type TimeperiodException struct {
 func (c *ClientTimeperiods) Show(name string) ([]Timeperiod, error) {
 	respReader, err := c.CentClient.centreonAPIRequest("show", timeperiodObject,
 		name)
+
 	if err != nil {
 		return nil, err
 	}
