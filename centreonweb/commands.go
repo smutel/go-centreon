@@ -98,6 +98,11 @@ func (c *ClientCommands) Exists(name string) (bool, error) {
 
 // Add adds a new command
 func (c *ClientCommands) Add(cmd Command) error {
+	if cmd.Name == "" || cmd.Type == "" || cmd.Line == "" {
+		return pkgerrors.New("cmd.Name or cmd.Type or cmd.Line parameter cannot" +
+			" be empty when calling Add function")
+	}
+
 	values := cmd.Name + ";" + cmd.Type + ";" + cmd.Line
 
 	respReader, err := c.CentClient.centreonAPIRequest("add", commandObject,
@@ -116,13 +121,13 @@ func (c *ClientCommands) Add(cmd Command) error {
 
 // Del removes the specified command
 func (c *ClientCommands) Del(name string) error {
-	respReader, err := c.CentClient.centreonAPIRequest("del", commandObject,
-		name)
-
 	if name == "" {
 		return pkgerrors.New("name parameter cannot be empty when calling Del " +
 			"function")
 	}
+
+	respReader, err := c.CentClient.centreonAPIRequest("del", commandObject,
+		name)
 
 	if err != nil {
 		return err
