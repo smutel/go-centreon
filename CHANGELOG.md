@@ -2,6 +2,20 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.4](https://github.com/smutel/go-centreon/compare/v0.0.3...v0.0.4) (2019-10-06)
+
+
+### Enhancements
+
+* **commands:** Check if parameters of function are empty ([958b841](https://github.com/smutel/go-centreon/commit/958b841))
+* **commands:** Check if parameters of function are empty ([cfced99](https://github.com/smutel/go-centreon/commit/cfced99))
+* **provider:** Rewrite some code ([8500a38](https://github.com/smutel/go-centreon/commit/8500a38))
+
+
+### Features
+
+* **hosts:** Implements functions to manage hosts ([be2b80c](https://github.com/smutel/go-centreon/commit/be2b80c))
+
 ### [0.0.3](https://github.com/smutel/go-centreon/compare/v0.0.1...v0.0.3) (2019-09-21)
 
 
