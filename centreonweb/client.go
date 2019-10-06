@@ -81,6 +81,12 @@ func (c *ClientCentreonWeb) Timeperiods() *ClientTimeperiods {
 	return &ClientTimeperiods{c}
 }
 
+// Hosts returns a Hosts client used for accessing functions
+// pertaining to Hosts functionality in the Centreon API.
+func (c *ClientCentreonWeb) Hosts() *ClientHosts {
+	return &ClientHosts{c}
+}
+
 func (c *ClientCentreonWeb) centreonAPIRequest(action string, object string,
 	values string) (io.ReadCloser, error) {
 

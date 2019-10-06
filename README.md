@@ -76,7 +76,7 @@ take one task to be implemented.
 |    Real Time Downtimes    |     RTDOWNTIME    | **NOT DONE** |
 |         Engine CFG        |     ENGINECFG     | **NOT DONE** |
 |       Host Templates      |        HTPL       | **NOT DONE** |
-|           Hosts           |        HOST       | **NOT DONE** |
+|           Hosts           |        HOST       |    *DONE*    |
 |      Host Categories      |         HC        | **NOT DONE** |
 |        Host Groups        |         HG        | **NOT DONE** |
 |    Host Group Services    |     HGSERVICE     | **NOT DONE** |
