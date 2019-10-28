@@ -38,7 +38,7 @@ type HostParam struct {
 	Coords3D                   string `json:"3d_coords"`
 	ActionURL                  string `json:"action_url"`
 	Activate                   string `json:"activate"`
-	ActiveChecksEnables        string `json:"active_checks_enabled"`
+	ActiveChecksEnabled        string `json:"active_checks_enabled"`
 	Address                    string `json:"address"`
 	Alias                      string `json:"alias"`
 	CheckCommand               string `json:"check_command"`
@@ -50,7 +50,7 @@ type HostParam struct {
 	CgAdditiveInheritance      string `json:"cg_additive_inheritance"`
 	EventHandler               string `json:"event_handler"`
 	EventHandlerArguments      string `json:"event_handler_arguments"`
-	EventHandlerEnables        string `json:"event_handler_enabled"`
+	EventHandlerEnabled        string `json:"event_handler_enabled"`
 	FirstNotificationDelay     string `json:"first_notification_delay"`
 	FlapDetectionEnabled       string `json:"flap_detection_enabled"`
 	FlapDetectionOptions       string `json:"flap_detection_options"`
@@ -103,6 +103,7 @@ type HostMacro struct {
 	Value       string `json:"macro value"`
 	IsPassword  string `json:"is_password"`
 	Description string `json:"description"`
+	Source      string `json:"source"`
 }
 
 // HostTemplates is an array of HostTemplate to store the answer from
@@ -349,7 +350,7 @@ func (c *ClientHosts) Setmacro(hostName string, macro HostMacro) error {
 	}
 
 	values := hostName + ";" + macro.Name + ";" + macro.Value + ";" +
-		macro.IsPassword + macro.Description
+		macro.IsPassword + ";" + macro.Description
 
 	respReader, err := c.CentClient.centreonAPIRequest("setmacro", hostObject,
 		values)
@@ -439,11 +440,11 @@ func (c *ClientHosts) Gettemplates(hostName string) ([]HostTemplate, error) {
 	return ms.HostTemplate, nil
 }
 
-// AddTemplate is used to link a template to a host
-func (c *ClientHosts) AddTemplate(hostName string, template string) error {
+// Addtemplate is used to link a template to a host
+func (c *ClientHosts) Addtemplate(hostName string, template string) error {
 	if hostName == "" || template == "" {
 		return pkgerrors.New("hostName or template parameters cannot be empty " +
-			"when calling Setmacro function")
+			"when calling Addtemplate function")
 	}
 
 	values := hostName + ";" + template
