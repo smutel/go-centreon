@@ -349,7 +349,7 @@ func (c *ClientHosts) Setmacro(hostName string, macro HostMacro) error {
 	}
 
 	values := hostName + ";" + macro.Name + ";" + macro.Value + ";" +
-		macro.IsPassword + macro.Description
+		macro.IsPassword + ";" + macro.Description
 
 	respReader, err := c.CentClient.centreonAPIRequest("setmacro", hostObject,
 		values)
