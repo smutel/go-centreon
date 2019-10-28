@@ -439,11 +439,11 @@ func (c *ClientHosts) Gettemplates(hostName string) ([]HostTemplate, error) {
 	return ms.HostTemplate, nil
 }
 
-// AddTemplate is used to link a template to a host
-func (c *ClientHosts) AddTemplate(hostName string, template string) error {
+// Addtemplate is used to link a template to a host
+func (c *ClientHosts) Addtemplate(hostName string, template string) error {
 	if hostName == "" || template == "" {
 		return pkgerrors.New("hostName or template parameters cannot be empty " +
-			"when calling Setmacro function")
+			"when calling Addtemplate function")
 	}
 
 	values := hostName + ";" + template

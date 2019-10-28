@@ -129,7 +129,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println("Macro " + macro.Name + "added to host " + host.Name)
+	fmt.Println("Macro " + macro.Name + " added to host " + host.Name)
 
 	hm, err := c.Hosts().Getmacro(host.Name)
 	if err != nil {
@@ -149,7 +149,7 @@ func main() {
 
 	fmt.Println("Macro " + macro.Name + " deleted from host " + host.Name)
 
-	err = c.Hosts().AddTemplate(host.Name, "App-DB-MySQL")
+	err = c.Hosts().Addtemplate(host.Name, "App-DB-MySQL")
 	if err != nil {
 		fmt.Println(err.Error())
 		os.Exit(1)
