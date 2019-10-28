@@ -103,6 +103,7 @@ type HostMacro struct {
 	Value       string `json:"macro value"`
 	IsPassword  string `json:"is_password"`
 	Description string `json:"description"`
+	Source      string `json:"source"`
 }
 
 // HostTemplates is an array of HostTemplate to store the answer from
