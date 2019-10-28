@@ -50,7 +50,7 @@ type HostParam struct {
 	CgAdditiveInheritance      string `json:"cg_additive_inheritance"`
 	EventHandler               string `json:"event_handler"`
 	EventHandlerArguments      string `json:"event_handler_arguments"`
-	EventHandlerEnables        string `json:"event_handler_enabled"`
+	EventHandlerEnabled        string `json:"event_handler_enabled"`
 	FirstNotificationDelay     string `json:"first_notification_delay"`
 	FlapDetectionEnabled       string `json:"flap_detection_enabled"`
 	FlapDetectionOptions       string `json:"flap_detection_options"`
