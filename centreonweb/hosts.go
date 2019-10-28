@@ -38,7 +38,7 @@ type HostParam struct {
 	Coords3D                   string `json:"3d_coords"`
 	ActionURL                  string `json:"action_url"`
 	Activate                   string `json:"activate"`
-	ActiveChecksEnables        string `json:"active_checks_enabled"`
+	ActiveChecksEnabled        string `json:"active_checks_enabled"`
 	Address                    string `json:"address"`
 	Alias                      string `json:"alias"`
 	CheckCommand               string `json:"check_command"`
