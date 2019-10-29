@@ -144,9 +144,9 @@ func (c *ClientCommands) Del(name string) error {
 func (c *ClientCommands) Setparam(name string, param string,
 	value string) error {
 
-	if name == "" || param == "" || value == "" {
-		return pkgerrors.New("name, param or value parameters cannot be empty " +
-			"when calling Setparam function")
+	if name == "" || param == "" {
+		return pkgerrors.New("name or param parameters cannot be empty when " +
+			"calling Setparam function")
 	}
 
 	values := name + ";" + param + ";" + value

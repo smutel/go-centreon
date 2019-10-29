@@ -147,14 +147,14 @@ func (c *ClientHosts) Get(name string) (Host, error) {
 			"calling Get function")
 	}
 
-	cmds, err := c.Show(name)
+	hosts, err := c.Show(name)
 	if err != nil {
 		return objFound, err
 	}
 
-	for _, c := range cmds {
-		if c.Name == name {
-			objFound = c
+	for _, h := range hosts {
+		if h.Name == name {
+			objFound = h
 		}
 	}
 
@@ -231,9 +231,9 @@ func (c *ClientHosts) Del(name string) error {
 func (c *ClientHosts) Setparam(name string, param string,
 	value string) error {
 
-	if name == "" || param == "" || value == "" {
-		return pkgerrors.New("name, param or value parameters cannot be empty " +
-			"when calling Setparam function")
+	if name == "" || param == "" {
+		return pkgerrors.New("name or param parameters cannot be empty when " +
+			"calling Setparam function")
 	}
 
 	values := name + ";" + param + ";" + value
@@ -337,11 +337,9 @@ func (c *ClientHosts) Getinstance(name string) (string, error) {
 
 // Setmacro is used to add or to update a macro linked to a host
 func (c *ClientHosts) Setmacro(hostName string, macro HostMacro) error {
-	if hostName == "" || macro.Name == "" || macro.Value == "" ||
-		macro.Description == "" {
-		return pkgerrors.New("hostName or macro.Name or macro.Value or " +
-			"macro.Description parameters cannot be empty when calling" +
-			"Setmacro function")
+	if hostName == "" || macro.Name == "" {
+		return pkgerrors.New("hostName or macro.Name parameters cannot be empty " +
+			"when calling Setmacro function")
 	}
 
 	if macro.IsPassword != "0" && macro.IsPassword != "1" {
