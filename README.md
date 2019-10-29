@@ -115,7 +115,3 @@ Command added: check-host-alive
 Set type (check) of command check-host-alive
 Command check-host-alive deleted
 ```
-
-## Known bugs which can impact this framework
-
-* Issue [7621](https://github.com/centreon/centreon/issues/7621)
