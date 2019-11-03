@@ -2,6 +2,23 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [0.0.5](https://github.com/smutel/go-centreon/compare/v0.0.4...v0.0.5) (2019-11-03)
+
+
+### Bug Fixes
+
+* **centreonweb:** Cannot put empty string when calling some function ([9394941](https://github.com/smutel/go-centreon/commit/9394941))
+* **hosts:** Function Setmacro of object Hosts is not setting up the description ([5edbc99](https://github.com/smutel/go-centreon/commit/5edbc99))
+
+
+### Enhancements
+
+* **hosts:** Add some missing functions ([dea621c](https://github.com/smutel/go-centreon/commit/dea621c))
+* **hosts:** Add source in HostMacro interface ([02cc81d](https://github.com/smutel/go-centreon/commit/02cc81d))
+* **hosts:** Rename ActiveChecksEnables to ActiveChecksEnabled ([275e63c](https://github.com/smutel/go-centreon/commit/275e63c))
+* **hosts:** Rename EventHandlerEnables to EventHandlerEnabled ([bb1306b](https://github.com/smutel/go-centreon/commit/bb1306b))
+* **hosts:** Rename function AddTemplate to Addtemplate in object Hosts ([cb46f65](https://github.com/smutel/go-centreon/commit/cb46f65))
+
 ### [0.0.4](https://github.com/smutel/go-centreon/compare/v0.0.3...v0.0.4) (2019-10-06)
 
 
