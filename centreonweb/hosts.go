@@ -34,11 +34,10 @@ type HostParams struct {
 
 // HostParam struct is used to store result of function getparam
 type HostParam struct {
-	Coords2D                   string `json:"2d_coords"`
-	Coords3D                   string `json:"3d_coords"`
 	ActionURL                  string `json:"action_url"`
 	Activate                   string `json:"activate"`
 	ActiveChecksEnabled        string `json:"active_checks_enabled"`
+	AcknowledgementTimeout     string `json:"acknowledgement_timeout"`
 	Address                    string `json:"address"`
 	Alias                      string `json:"alias"`
 	CheckCommand               string `json:"check_command"`
@@ -46,6 +45,8 @@ type HostParam struct {
 	CheckInterval              string `json:"check_interval"`
 	CheckFreshness             string `json:"check_freshness"`
 	CheckPeriod                string `json:"check_period"`
+	Coords2D                   string `json:"2d_coords"`
+	Coords3D                   string `json:"3d_coords"`
 	ContactAdditiveInheritance string `json:"contact_additive_inheritance"`
 	CgAdditiveInheritance      string `json:"cg_additive_inheritance"`
 	EventHandler               string `json:"event_handler"`
@@ -54,10 +55,11 @@ type HostParam struct {
 	FirstNotificationDelay     string `json:"first_notification_delay"`
 	FlapDetectionEnabled       string `json:"flap_detection_enabled"`
 	FlapDetectionOptions       string `json:"flap_detection_options"`
-	HostHighFlapThreshold      string `json:"host_high_flap_threshold"`
-	HostLowFlapThreshold       string `json:"host_low_flap_threshold"`
+	FreshnessThreshold         string `json:"freshness_threshold"`
+	HighFlapThreshold          string `json:"high_flap_threshold"`
 	IconImage                  string `json:"icon_image"`
 	IconImageAlt               string `json:"icon_image_alt"`
+	LowFlapThreshold           string `json:"low_flap_threshold"`
 	MaxCheckAttempts           string `json:"max_check_attempts"`
 	Name                       string `json:"name"`
 	Notes                      string `json:"notes"`
@@ -66,7 +68,7 @@ type HostParam struct {
 	NotificationInterval       string `json:"notification_interval"`
 	NotificationOptions        string `json:"notification_options"`
 	NotificationPeriod         string `json:"notification_period"`
-	RecoveryNotificationsDelay string `json:"recovery_notification_delay"`
+	RecoveryNotificationDelay  string `json:"recovery_notification_delay"`
 	ObsessOverHost             string `json:"obsess_over_host"`
 	PassiveChecksEnabled       string `json:"passive_checks_enabled"`
 	ProcessPerfData            string `json:"process_perf_data"`
@@ -77,7 +79,6 @@ type HostParam struct {
 	SnmpVersion                string `json:"snmp_version"`
 	StalkingOptions            string `json:"stalking_options"`
 	StatusmapImage             string `json:"statusmap_image"`
-	HostNotificationOptions    string `json:"host_notification_options"`
 	Timezone                   string `json:"timezone"`
 }
 
@@ -114,6 +115,54 @@ type HostTemplates struct {
 
 // HostTemplate struct is used to store parameters of a macro
 type HostTemplate struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// HostParents is an array of HostParent to store the answer from
+// Centreon API
+type HostParents struct {
+	HostParent []HostParent `json:"result"`
+}
+
+// HostParent struct is used to store parameters of a parent
+type HostParent struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// HostCgs is an array of HostCg to store the answer from
+// Centreon API
+type HostCgs struct {
+	HostCg []HostCg `json:"result"`
+}
+
+// HostCg struct is used to store parameters of a contactgroup
+type HostCg struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// HostContacts is an array of HostContact to store the answer from
+// Centreon API
+type HostContacts struct {
+	HostContact []HostContact `json:"result"`
+}
+
+// HostContact struct is used to store parameters of a contact
+type HostContact struct {
+	ID   string `json:"id"`
+	Name string `json:"name"`
+}
+
+// HostGroups is an array of HostGroup to store the answer from
+// Centreon API
+type HostGroups struct {
+	HostGroup []HostGroup `json:"result"`
+}
+
+// HostGroup struct is used to store parameters of a contact
+type HostGroup struct {
 	ID   string `json:"id"`
 	Name string `json:"name"`
 }
@@ -417,7 +466,7 @@ func (c *ClientHosts) Delmacro(hostName string, macroName string) error {
 func (c *ClientHosts) Gettemplates(hostName string) ([]HostTemplate, error) {
 	if hostName == "" {
 		return nil, pkgerrors.New("hostName parameter cannot be empty when " +
-			"calling Gettemplate function")
+			"calling Gettemplates function")
 	}
 
 	respReader, err := c.CentClient.centreonAPIRequest("gettemplate",
@@ -490,13 +539,489 @@ func (c *ClientHosts) Applytemplates(hostName string) error {
 
 	if hostName == "" {
 		return pkgerrors.New("hostName parameter cannot be empty when calling " +
-			"Applytemplate function")
+			"Applytemplates function")
 	}
 
 	values := hostName
 
 	respReader, err := c.CentClient.centreonAPIRequest("applytpl", hostObject,
 		values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Getparents is used to get a parent linked to a host
+func (c *ClientHosts) Getparents(hostName string) ([]HostParent, error) {
+	if hostName == "" {
+		return nil, pkgerrors.New("hostName parameter cannot be empty when " +
+			"calling Getparents function")
+	}
+
+	respReader, err := c.CentClient.centreonAPIRequest("getparent",
+		hostObject, hostName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	var hp HostParents
+	decoder := json.NewDecoder(respReader)
+	decoder.Decode(&hp)
+
+	return hp.HostParent, nil
+}
+
+// Addparent is used to link a parent to a host
+func (c *ClientHosts) Addparent(hostName string, parent string) error {
+	if hostName == "" || parent == "" {
+		return pkgerrors.New("hostName or parent parameters cannot be empty " +
+			"when calling Addparent function")
+	}
+
+	values := hostName + ";" + parent
+
+	respReader, err := c.CentClient.centreonAPIRequest("addparent", hostObject,
+		values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Setparent is used to replace parents linked to a host
+func (c *ClientHosts) Setparent(hostName string, parents string) error {
+	if hostName == "" || parents == "" {
+		return pkgerrors.New("hostName or parent parameters cannot be empty " +
+			"when calling Setparent function")
+	}
+
+	values := hostName + ";" + parents
+
+	respReader, err := c.CentClient.centreonAPIRequest("setparent", hostObject,
+		values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Delparent is used to delete a parent linked to a host
+func (c *ClientHosts) Delparent(hostName string, parentName string) error {
+
+	if hostName == "" || parentName == "" {
+		return pkgerrors.New("hostName or parentName parameter cannot be " +
+			"empty when calling Delparent function")
+	}
+
+	values := hostName + ";" + parentName
+
+	respReader, err := c.CentClient.centreonAPIRequest("delparent", hostObject,
+		values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Getcgs is used to get contactgroups linked to a host
+func (c *ClientHosts) Getcgs(hostName string) ([]HostCg, error) {
+	if hostName == "" {
+		return nil, pkgerrors.New("hostName parameter cannot be empty when " +
+			"calling Getcgs function")
+	}
+
+	respReader, err := c.CentClient.centreonAPIRequest("getcontactgroup",
+		hostObject, hostName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	var hcg HostCgs
+	decoder := json.NewDecoder(respReader)
+	decoder.Decode(&hcg)
+
+	return hcg.HostCg, nil
+}
+
+// Addcg is used to link a contactgroup to a host
+func (c *ClientHosts) Addcg(hostName string, cg string) error {
+	if hostName == "" || cg == "" {
+		return pkgerrors.New("hostName or cg parameters cannot be empty " +
+			"when calling Addcg function")
+	}
+
+	values := hostName + ";" + cg
+
+	respReader, err := c.CentClient.centreonAPIRequest("addcontactgroup",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Setcg is used to replace contactgroups linked to a host
+func (c *ClientHosts) Setcg(hostName string, cgs string) error {
+	if hostName == "" || cgs == "" {
+		return pkgerrors.New("hostName or cg parameters cannot be empty " +
+			"when calling Setcg function")
+	}
+
+	values := hostName + ";" + cgs
+
+	respReader, err := c.CentClient.centreonAPIRequest("setcontactgroup",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Delcg is used to delete a contactgroup linked to a host
+func (c *ClientHosts) Delcg(hostName string, cgName string) error {
+
+	if hostName == "" || cgName == "" {
+		return pkgerrors.New("hostName or cgName parameter cannot be " +
+			"empty when calling Delcg function")
+	}
+
+	values := hostName + ";" + cgName
+
+	respReader, err := c.CentClient.centreonAPIRequest("delcontactgroup",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Getcontacts is used to get contacts linked to a host
+func (c *ClientHosts) Getcontacts(hostName string) ([]HostContact, error) {
+	if hostName == "" {
+		return nil, pkgerrors.New("hostName parameter cannot be empty when " +
+			"calling Getcontacts function")
+	}
+
+	respReader, err := c.CentClient.centreonAPIRequest("getcontact",
+		hostObject, hostName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	var hc HostContacts
+	decoder := json.NewDecoder(respReader)
+	decoder.Decode(&hc)
+
+	return hc.HostContact, nil
+}
+
+// Addcontact is used to link a contact to a host
+func (c *ClientHosts) Addcontact(hostName string, contact string) error {
+	if hostName == "" || contact == "" {
+		return pkgerrors.New("hostName or contact parameters cannot be empty " +
+			"when calling Addcontact function")
+	}
+
+	values := hostName + ";" + contact
+
+	respReader, err := c.CentClient.centreonAPIRequest("addcontact",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Setcontact is used to replace contactgroups linked to a host
+func (c *ClientHosts) Setcontact(hostName string, contacts string) error {
+	if hostName == "" || contacts == "" {
+		return pkgerrors.New("hostName or contact parameters cannot be empty " +
+			"when calling Setcontact function")
+	}
+
+	values := hostName + ";" + contacts
+
+	respReader, err := c.CentClient.centreonAPIRequest("setcontact",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Delcontact is used to delete a contact linked to a host
+func (c *ClientHosts) Delcontact(hostName string, contact string) error {
+
+	if hostName == "" || contact == "" {
+		return pkgerrors.New("hostName or contact parameter cannot be " +
+			"empty when calling Delcontact function")
+	}
+
+	values := hostName + ";" + contact
+
+	respReader, err := c.CentClient.centreonAPIRequest("delcontact",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Gethostgroups is used to get hostgroups linked to a host
+func (c *ClientHosts) Gethostgroups(hostName string) ([]HostGroup, error) {
+	if hostName == "" {
+		return nil, pkgerrors.New("hostName parameter cannot be empty when " +
+			"calling Getcontacts function")
+	}
+
+	respReader, err := c.CentClient.centreonAPIRequest("gethostgroup",
+		hostObject, hostName)
+
+	if err != nil {
+		return nil, err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	var hgs HostGroups
+	decoder := json.NewDecoder(respReader)
+	decoder.Decode(&hgs)
+
+	return hgs.HostGroup, nil
+}
+
+// Addhostgroup is used to link a contact to a host
+func (c *ClientHosts) Addhostgroup(hostName string, hostgroup string) error {
+	if hostName == "" || hostgroup == "" {
+		return pkgerrors.New("hostName or hostgroup parameters cannot be empty " +
+			"when calling Addhostgroup function")
+	}
+
+	values := hostName + ";" + hostgroup
+
+	respReader, err := c.CentClient.centreonAPIRequest("addhostgroup",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Sethostgroup is used to replace hostgroups linked to a host
+func (c *ClientHosts) Sethostgroup(hostName string, hostgroups string) error {
+	if hostName == "" || hostgroups == "" {
+		return pkgerrors.New("hostName or hostgroups parameters cannot be empty " +
+			"when calling Sethostgroup function")
+	}
+
+	values := hostName + ";" + hostgroups
+
+	respReader, err := c.CentClient.centreonAPIRequest("sethostgroup",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Delhostgroup is used to delete a hostgroup linked to a host
+func (c *ClientHosts) Delhostgroup(hostName string, hostgroup string) error {
+
+	if hostName == "" || hostgroup == "" {
+		return pkgerrors.New("hostName or hostgroup parameter cannot be " +
+			"empty when calling Delhostgroup function")
+	}
+
+	values := hostName + ";" + hostgroup
+
+	respReader, err := c.CentClient.centreonAPIRequest("delhostgroup",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Setseverity is used to set the severity of a host
+func (c *ClientHosts) Setseverity(hostName string, severity string) error {
+
+	if hostName == "" {
+		return pkgerrors.New("hostName parameter cannot be empty when calling " +
+			"Setseverity function")
+	}
+
+	values := hostName + ";" + severity
+
+	respReader, err := c.CentClient.centreonAPIRequest("setseverity",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Unsetseverity is used to unset the severity of a host
+func (c *ClientHosts) Unsetseverity(hostName string) error {
+
+	if hostName == "" {
+		return pkgerrors.New("hostName parameter cannot be empty when calling " +
+			"Unsetseverity function")
+	}
+
+	values := hostName
+
+	respReader, err := c.CentClient.centreonAPIRequest("unsetseverity",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Enable is used to enable a host
+func (c *ClientHosts) Enable(hostName string) error {
+
+	if hostName == "" {
+		return pkgerrors.New("hostName parameter cannot be empty when calling " +
+			"Enable function")
+	}
+
+	values := hostName
+
+	respReader, err := c.CentClient.centreonAPIRequest("enable",
+		hostObject, values)
+
+	if err != nil {
+		return err
+	}
+
+	if respReader != nil {
+		defer respReader.Close()
+	}
+
+	return nil
+}
+
+// Disable is used to disable a host
+func (c *ClientHosts) Disable(hostName string) error {
+
+	if hostName == "" {
+		return pkgerrors.New("hostName parameter cannot be empty when calling " +
+			"Disable function")
+	}
+
+	values := hostName
+
+	respReader, err := c.CentClient.centreonAPIRequest("disable",
+		hostObject, values)
 
 	if err != nil {
 		return err
